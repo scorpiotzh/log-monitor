@@ -16,4 +16,4 @@
 bin/*
 build/*
 logs/*
-.idea
+.idea/*
