@@ -3,6 +3,8 @@ package elastic
 import (
 	"context"
 	"fmt"
+	"github.com/olivere/elastic/v7"
+	"log-monitor/utils"
 	"testing"
 	"time"
 )
@@ -22,10 +24,11 @@ func TestPushIndex(t *testing.T) {
 	la := LogApi{
 		Method:  "test",
 		Ip:      "127.0.0.1",
-		Latency: 100,
-		LctTime: time.Now(),
+		Latency: 200,
+		CalTime: time.Now(),
+		LogDate: time.Now().Format("2006-01-02"),
 		ErrMsg:  "internal err",
-		ErrNo:   500,
+		ErrNo:   400,
 	}
 	err = ela.PushIndex(Index, la)
 	if err != nil {
@@ -43,5 +46,17 @@ func TestDocList(t *testing.T) {
 		t.Fatal(err)
 	}
 	list := SearchResultToLogApi(res)
-	fmt.Println(list)
+	fmt.Println(utils.Json(list))
+}
+
+func TestDelete(t *testing.T) {
+	ela, err := Initialize(context.TODO(), Url, Username, Password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	q := elastic.NewTermQuery("method", "test")
+	err = ela.DeleteByQuery(Index, q)
+	if err != nil {
+		t.Fatal(err)
+	}
 }

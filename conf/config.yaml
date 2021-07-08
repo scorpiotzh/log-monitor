@@ -1,0 +1,7 @@
+http_server:
+  in_address: ":9090"
+elastic_server:
+  url: "http://localhost:9200/"
+  username: ""
+  password: ""
+  log_index: "test"

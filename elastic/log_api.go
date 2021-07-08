@@ -7,12 +7,13 @@ import (
 )
 
 type LogApi struct {
-	Method  string        `json:"method"`  //调用方法
-	Ip      string        `json:"ip"`      //调用的IP地址
-	Latency time.Duration `json:"latency"` //接口耗费时间
-	LctTime time.Time     `json:"lctTime"` //调用时间点
-	ErrMsg  string        `json:"err_msg"` //错误消息
-	ErrNo   int           `json:"err_no"`  //错误码
+	Method  string        `json:"method"`   //调用方法
+	Ip      string        `json:"ip"`       //调用的IP地址
+	Latency time.Duration `json:"latency"`  //接口耗费时间
+	CalTime time.Time     `json:"lctTime"`  //调用时间点
+	LogDate string        `json:"log_date"` //日期
+	ErrMsg  string        `json:"err_msg"`  //错误消息
+	ErrNo   int           `json:"err_no"`   //错误码
 }
 
 func SearchResultToLogApi(sr *elastic.SearchResult) []LogApi {

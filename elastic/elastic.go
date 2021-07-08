@@ -39,11 +39,20 @@ func (e *Elastic) PushIndex(index string, body interface{}) error {
 	return nil
 }
 
-// 删除
+// 删除索引
 func (e *Elastic) Purge(index string) error {
 	_, err := e.client.DeleteIndex(index).Do(e.ctx)
 	if err != nil {
 		return fmt.Errorf("es delete index err:%s", err.Error())
+	}
+	return nil
+}
+
+// 查询删除
+func (e *Elastic) DeleteByQuery(index string, q elastic.Query) error {
+	_, err := e.client.DeleteByQuery().Index(index).Query(q).Do(e.ctx)
+	if err != nil {
+		return fmt.Errorf("es delete by query err:%s", err.Error())
 	}
 	return nil
 }
