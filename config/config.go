@@ -12,10 +12,10 @@ type LogConfig struct {
 		InAddress string `json:"in_address" yaml:"in_address"`
 	} `json:"http_server" yaml:"http_server"`
 	ElasticServer struct {
-		Url      string `json:"url" yaml:"url"`
-		Username string `json:"username" yaml:"username"`
-		Password string `json:"password" yaml:"password"`
-		LogIndex string `json:"log_index" yaml:"log_index"`
+		Url       string   `json:"url" yaml:"url"`
+		Username  string   `json:"username" yaml:"username"`
+		Password  string   `json:"password" yaml:"password"`
+		IndexList []string `json:"index_list" yaml:"index_list"`
 	} `json:"elastic_server" yaml:"elastic_server"`
 }
 

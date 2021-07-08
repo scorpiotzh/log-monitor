@@ -4,4 +4,4 @@ elastic_server:
   url: "http://localhost:9200/"
   username: ""
   password: ""
-  log_index: "test"
+  index_list: [ "test" ]
