@@ -4,4 +4,13 @@ elastic_server:
   url: "http://localhost:9200/"
   username: ""
   password: ""
-  index_list: [ "test" ]
+timer_server:
+  api_notify_min_call_num: 5 # api最少调用次数
+  api_notify_ticker: 1 # 通知检查间隔时间 分钟
+  api_notify_check_time: 300 # 检查时间 几分钟之前
+  api_notify_wx_key: "7b059317-bbf7-45d7-bb5d-aac6ce5ab416" # 微信通知 key
+  delete_index_list: [ "test-index" ]
+  check_index_list:
+    "test-index":
+      - { "method": "test1", "desc": "测试1","num": 0 } # 方法，方法名，最少调用次数
+      - { "method": "test2", "desc": "测试2","num": 0 }

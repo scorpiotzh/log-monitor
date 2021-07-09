@@ -88,7 +88,8 @@ func runServer(ctx *cli.Context) error {
 	}
 
 	logTimer := timer.Initialize(ela)
-	logTimer.DeleteByLogDate(config.Cfg.ElasticServer.IndexList)
+	logTimer.RunDeleteLogByLogDate(config.Cfg.TimerServer.DeleteIndexList)
+	logTimer.RunApiCheck(ctxServer, &wg)
 
 	logHttp := http_server.Initialize(ela, config.Cfg.HttpServer.InAddress)
 	logHttp.Run()

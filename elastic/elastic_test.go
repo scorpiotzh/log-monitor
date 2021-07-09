@@ -13,7 +13,7 @@ const (
 	Url      = "http://localhost:9200/"
 	Username = ""
 	Password = ""
-	Index    = "test"
+	Index    = "test-index"
 )
 
 func TestPushIndex(t *testing.T) {
@@ -24,11 +24,11 @@ func TestPushIndex(t *testing.T) {
 	la := LogApi{
 		Method:  "test",
 		Ip:      "127.0.0.1",
-		Latency: 200,
+		Latency: time.Second * 1,
 		CalTime: time.Now(),
 		LogDate: time.Now().Format("2006-01-02"),
-		ErrMsg:  "internal err",
-		ErrNo:   400,
+		ErrMsg:  "",
+		ErrNo:   0,
 	}
 	err = ela.PushIndex(Index, la)
 	if err != nil {
@@ -58,5 +58,23 @@ func TestDelete(t *testing.T) {
 	err = ela.DeleteByQuery(Index, q)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestSearch(t *testing.T) {
+	ela, err := Initialize(context.TODO(), Url, Username, Password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := ela.SearchLogApiInfo(Index, "test1", -time.Hour*24)
+	if err != nil {
+		t.Fatal(err)
+	} else {
+		fmt.Println(utils.Json(&res))
+	}
+	if res2, err := ela.SearchLogApiErrCount(Index, "test1", -time.Hour, res.Aggregations.ErrorCount.DocCount); err != nil {
+		t.Fatal(err)
+	} else {
+		fmt.Println(utils.Json(&res2))
 	}
 }

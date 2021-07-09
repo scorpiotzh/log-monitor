@@ -5,6 +5,7 @@ import (
 	"github.com/go-yaml/yaml"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 type LogConfig struct {
@@ -12,11 +13,22 @@ type LogConfig struct {
 		InAddress string `json:"in_address" yaml:"in_address"`
 	} `json:"http_server" yaml:"http_server"`
 	ElasticServer struct {
-		Url       string   `json:"url" yaml:"url"`
-		Username  string   `json:"username" yaml:"username"`
-		Password  string   `json:"password" yaml:"password"`
-		IndexList []string `json:"index_list" yaml:"index_list"`
+		Url      string `json:"url" yaml:"url"`
+		Username string `json:"username" yaml:"username"`
+		Password string `json:"password" yaml:"password"`
 	} `json:"elastic_server" yaml:"elastic_server"`
+	TimerServer struct {
+		ApiNotifyMinCallNum int           `json:"api_notify_min_call_num" yaml:"api_notify_min_call_num"`
+		ApiNotifyTicker     time.Duration `json:"api_notify_ticker" yaml:"api_notify_ticker"`
+		ApiNotifyCheckTime  time.Duration `json:"api_notify_check_time" yaml:"api_notify_check_time"`
+		ApiNotifyWxKey      string        `json:"api_notify_wx_key" yaml:"api_notify_wx_key"`
+		DeleteIndexList     []string      `json:"delete_index_list" yaml:"delete_index_list"`
+		CheckIndexList      map[string][]struct {
+			Method string `json:"method" yaml:"method"`
+			Desc   string `json:"desc" yaml:"desc"`
+			Num    int    `json:"num" yaml:"num"`
+		} `json:"check_index_list" yaml:"check_index_list"`
+	} `json:"timer_server" yaml:"timer_server"`
 }
 
 var Cfg LogConfig
