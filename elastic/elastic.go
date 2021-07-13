@@ -29,6 +29,10 @@ func Initialize(ctx context.Context, url, username, password string) (*Elastic, 
 	return &Elastic{ctx: ctx, client: client}, nil
 }
 
+func (e *Elastic) Client() *elastic.Client {
+	return e.client
+}
+
 // 插入
 func (e *Elastic) PushIndex(index string, body interface{}) error {
 	id := strconv.Itoa(int(time.Now().UnixNano())) //相当于主键

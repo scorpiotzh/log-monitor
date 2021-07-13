@@ -1,15 +1,32 @@
 package handle
 
 import (
+	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/olivere/elastic/v7"
 	"log-monitor/config"
 	"log-monitor/utils"
 	"net/http"
+	"strconv"
 	"time"
 )
 
 func (l *LogHttpHandle) Version(ctx *gin.Context) {
 	log.Info("Version:", time.Now().String())
+
+	gte := strconv.FormatInt(time.Now().Add(-time.Hour).UnixNano()/1e6, 10)
+	fmt.Println()
+	q := elastic.NewBoolQuery().Filter(
+		elastic.NewRangeQuery("call_time").Gte(gte),
+		elastic.NewTermQuery("method", "DasConfig"),
+	)
+	res, err := l.ela.Client().Search().Index("das2-index").Query(q).Size(100).Do(context.TODO())
+	if err != nil {
+		log.Error(err)
+	}
+	log.Info("Version:", utils.Json(&res))
+
 	ctx.JSON(http.StatusOK, utils.ApiRespOK(nil))
 }
 
