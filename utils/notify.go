@@ -66,7 +66,7 @@ func SendNotifyWxApiInfo(key string, rate, duration time.Duration, apiMap map[st
 	if len(apiMap) == 0 {
 		return nil
 	}
-	msg := fmt.Sprintf(`<font color="info">接口告警 (频率 - 时长：%d分钟 - %d分钟)</font>
+	msg := fmt.Sprintf(`<font color="info">接口告警</font> (频率 - 时长：%d分钟 - %d分钟)
 接口｜总次数｜成功率｜平均耗时
 `, rate, duration)
 	indexStr := `
