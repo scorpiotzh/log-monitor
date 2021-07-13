@@ -88,7 +88,7 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 			} else {
 				averageResponseTime = fmt.Sprintf(`%.3f ms`, float64(m.AverageResponseTime.Microseconds()/1000))
 			}
-			msg += fmt.Sprintf(methodStr, m.Method, m.Total, successRate, averageResponseTime)
+			msg += fmt.Sprintf(methodStr, m.MethodDesc, m.Total, successRate, averageResponseTime)
 		}
 	}
 	return SendNotifyWx(NotifyWxTypeMarkdown, msg, key)
