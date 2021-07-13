@@ -21,6 +21,7 @@ type LogConfig struct {
 		ApiNotifyMinCallNum int           `json:"api_notify_min_call_num" yaml:"api_notify_min_call_num"`
 		ApiNotifyTicker     time.Duration `json:"api_notify_ticker" yaml:"api_notify_ticker"`
 		ApiNotifyCheckTime  time.Duration `json:"api_notify_check_time" yaml:"api_notify_check_time"`
+		ApiNotifyAllTicker  time.Duration `json:"api_notify_all_ticker" yaml:"api_notify_all_ticker"`
 		ApiNotifyWxKey      string        `json:"api_notify_wx_key" yaml:"api_notify_wx_key"`
 		DeleteIndexList     []string      `json:"delete_index_list" yaml:"delete_index_list"`
 		CheckIndexList      map[string][]struct {

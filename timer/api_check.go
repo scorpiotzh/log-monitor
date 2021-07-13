@@ -11,6 +11,7 @@ import (
 
 func (l *LogTimer) RunApiCheck(ctx context.Context, wg *sync.WaitGroup) {
 	tickerApi := time.NewTicker(time.Minute * config.Cfg.TimerServer.ApiNotifyTicker)
+	tickerAll := time.NewTicker(time.Minute * config.Cfg.TimerServer.ApiNotifyAllTicker)
 	wg.Add(1)
 	go func() {
 		for {
@@ -21,6 +22,8 @@ func (l *LogTimer) RunApiCheck(ctx context.Context, wg *sync.WaitGroup) {
 					log.Error("doApiCheck err:", err)
 				}
 				log.Info("RunApiCheck doApiCheck end ...")
+			case <-tickerAll.C:
+
 			case <-ctx.Done():
 				wg.Done()
 				return
