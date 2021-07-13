@@ -3,6 +3,7 @@ package handle
 import (
 	"github.com/gin-gonic/gin"
 	"log-monitor/config"
+	"log-monitor/elastic"
 	"log-monitor/utils"
 	"net/http"
 	"time"
@@ -14,6 +15,10 @@ func (l *LogHttpHandle) Version(ctx *gin.Context) {
 }
 
 func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
+	res, _ := l.ela.DocList("das2-index", 1, 10)
+	list := elastic.SearchResultToLogApi(res)
+	log.Info("SearchResultToLogApi:", utils.Json(&list))
+
 	apiMap := make(map[string][]utils.ApiInfo)
 	for index, methods := range config.Cfg.TimerServer.CheckIndexList {
 		for _, m := range methods {
