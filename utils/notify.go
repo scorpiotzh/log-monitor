@@ -72,10 +72,15 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 <font color="info">%s</font>
 `
 	methodStr := "> %s|%d|%.f%%|%d ms\n"
+	methodStr2 := "> %s|%d|%.f%%|%.3f s\n"
 	for k, api := range apiMap {
 		msg += fmt.Sprintf(indexStr, k)
 		for _, m := range api {
-			msg += fmt.Sprintf(methodStr, m.Method, m.Total, m.SuccessRate*100, m.AverageResponseTime.Microseconds())
+			if m.AverageResponseTime.Seconds() > 1 {
+				msg += fmt.Sprintf(methodStr2, m.Method, m.Total, m.SuccessRate*100, m.AverageResponseTime.Seconds())
+			} else {
+				msg += fmt.Sprintf(methodStr, m.Method, m.Total, m.SuccessRate*100, m.AverageResponseTime.Microseconds())
+			}
 		}
 	}
 	return SendNotifyWx(NotifyWxTypeMarkdown, msg, key)
