@@ -11,13 +11,13 @@ import (
 )
 
 type LogApi struct {
-	Method  string        `json:"method"`   //调用方法
-	Ip      string        `json:"ip"`       //调用的IP地址
-	Latency time.Duration `json:"latency"`  //接口耗费时间
-	CalTime time.Time     `json:"lctTime"`  //调用时间点
-	LogDate string        `json:"log_date"` //日期
-	ErrMsg  string        `json:"err_msg"`  //错误消息
-	ErrNo   int           `json:"err_no"`   //错误码
+	Method   string        `json:"method"`    //调用方法
+	Ip       string        `json:"ip"`        //调用的IP地址
+	Latency  time.Duration `json:"latency"`   //接口耗费时间
+	CallTime time.Time     `json:"call_time"` //调用时间点
+	LogDate  string        `json:"log_date"`  //日期
+	ErrMsg   string        `json:"err_msg"`   //错误消息
+	ErrNo    int           `json:"err_no"`    //错误码
 }
 
 func SearchResultToLogApi(sr *elastic.SearchResult) []LogApi {
@@ -51,9 +51,9 @@ type ResultSearchLogApiInfo struct {
 
 // 查询接口调用次数统计
 func (e *Elastic) SearchLogApiInfo(index, method string, before time.Duration) (*ResultSearchLogApiInfo, error) {
-	gte := strconv.FormatInt(time.Now().Add(before).UnixNano()/1000000, 10)
+	gte := strconv.FormatInt(time.Now().Add(before).UnixNano()/1e6, 10)
 	q := elastic.NewBoolQuery().Filter(
-		elastic.NewRangeQuery("lctTime").Gte(gte),
+		elastic.NewRangeQuery("call_time").Gte(gte),
 		elastic.NewTermQuery("method", method),
 	)
 
@@ -90,9 +90,9 @@ type ResultSearchLogApiErrCount struct {
 
 // 错误码数量统计
 func (e *Elastic) SearchLogApiErrCount(index, method string, before time.Duration, size int) (*ResultSearchLogApiErrCount, error) {
-	gte := strconv.FormatInt(time.Now().Add(before).UnixNano()/1000000, 10)
+	gte := strconv.FormatInt(time.Now().Add(before).UnixNano()/1e6, 10)
 	q := elastic.NewBoolQuery().Filter(
-		elastic.NewRangeQuery("lctTime").Gte(gte),
+		elastic.NewRangeQuery("call_time").Gte(gte),
 		elastic.NewTermQuery("method", method),
 	).MustNot(elastic.NewTermQuery("err_no", 0))
 	res, err := e.client.Search().Index(index).Query(q).Size(100).Do(e.ctx)

@@ -30,13 +30,13 @@ func (l *LogHttpHandle) PushLog(ctx *gin.Context) {
 	}
 	log.Info("LogHttpHandle:", funcName, utils.Json(&req))
 	la := elastic.LogApi{
-		Method:  req.Method,
-		Ip:      req.Ip,
-		Latency: req.Latency,
-		CalTime: time.Now(),
-		LogDate: time.Now().Format("2006-01-02"),
-		ErrMsg:  req.ErrMsg,
-		ErrNo:   req.ErrNo,
+		Method:   req.Method,
+		Ip:       req.Ip,
+		Latency:  req.Latency,
+		CallTime: time.Now(),
+		LogDate:  time.Now().Format("2006-01-02"),
+		ErrMsg:   req.ErrMsg,
+		ErrNo:    req.ErrNo,
 	}
 	if err := l.ela.PushIndex(req.Index, &la); err != nil {
 		log.Error("PushIndex err:", err.Error(), utils.Json(&req))
