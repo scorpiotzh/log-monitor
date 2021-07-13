@@ -45,7 +45,7 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 			})
 		}
 	}
-	_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, apiMap)
+	_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, 1, 1, apiMap)
 	ctx.JSON(http.StatusOK, utils.ApiRespOK(nil))
 }
 

@@ -25,5 +25,5 @@ func TestSendNotifyWxApiInfo(t *testing.T) {
 			AverageResponseTime: time.Second * 3,
 		}},
 	}
-	_ = SendNotifyWxApiInfo(key, apiMap)
+	_ = SendNotifyWxApiInfo(key, 1, 1, apiMap)
 }

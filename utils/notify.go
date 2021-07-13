@@ -62,13 +62,13 @@ type ApiInfo struct {
 	AverageResponseTime time.Duration `json:"average_response_time"`
 }
 
-func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
+func SendNotifyWxApiInfo(key string, rate, duration time.Duration, apiMap map[string][]ApiInfo) error {
 	if len(apiMap) == 0 {
 		return nil
 	}
-	msg := `<font color="info">接口告警</font>
+	msg := fmt.Sprintf(`<font color="info">接口告警 (频率 - 时长：%d分钟 - %d分钟)</font>
 接口｜总次数｜成功率｜平均耗时
-`
+`, rate, duration)
 	indexStr := `
 <font color="info">%s</font>
 `

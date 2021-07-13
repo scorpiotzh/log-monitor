@@ -77,7 +77,7 @@ func (l *LogTimer) doApiCheck() error {
 			}
 		}
 	}
-	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, apiMap)
+	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyTicker, config.Cfg.TimerServer.ApiNotifyCheckTime, apiMap)
 }
 
 func (l *LogTimer) doApiCheckAll() error {
@@ -112,5 +112,5 @@ func (l *LogTimer) doApiCheckAll() error {
 			})
 		}
 	}
-	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, apiMap)
+	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyAllTicker, apiMap)
 }
