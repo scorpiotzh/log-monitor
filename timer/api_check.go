@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log-monitor/config"
-	"log-monitor/logger"
 	"log-monitor/utils"
 	"sync"
 	"time"
@@ -17,11 +16,11 @@ func (l *LogTimer) RunApiCheck(ctx context.Context, wg *sync.WaitGroup) {
 		for {
 			select {
 			case <-tickerApi.C:
-				logger.Info("RunApiCheck doApiCheck start ...")
+				log.Info("RunApiCheck doApiCheck start ...")
 				if err := l.doApiCheck(); err != nil {
-					logger.Error("doApiCheck err:", err)
+					log.Error("doApiCheck err:", err)
 				}
-				logger.Info("RunApiCheck doApiCheck end ...")
+				log.Info("RunApiCheck doApiCheck end ...")
 			case <-ctx.Done():
 				wg.Done()
 				return
@@ -46,7 +45,7 @@ func (l *LogTimer) doApiCheck() error {
 				avgTime = time.Duration(res.Aggregations.TotalTime.Value) / time.Duration(total)
 			}
 			successRate := float64(1)
-			logger.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d ms]", index, m.Method, total, okCount, errCount, avgTime.Microseconds())
+			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d ms]", index, m.Method, total, okCount, errCount, avgTime.Microseconds())
 			if total < config.Cfg.TimerServer.ApiNotifyMinCallNum && total < m.Num {
 				continue
 			} else if total > 0 {

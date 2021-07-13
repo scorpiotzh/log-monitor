@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log-monitor/elastic"
-	"log-monitor/logger"
 	"log-monitor/utils"
 	"net/http"
 	"time"
@@ -29,7 +28,7 @@ func (l *LogHttpHandle) PushLog(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ApiRespErr(http.StatusInternalServerError, fmt.Sprintf("ShouldBindJSON err:%s", err.Error())))
 		return
 	}
-	logger.Info("LogHttpHandle:", funcName, utils.Json(&req))
+	log.Info("LogHttpHandle:", funcName, utils.Json(&req))
 	la := elastic.LogApi{
 		Method:  req.Method,
 		Ip:      req.Ip,

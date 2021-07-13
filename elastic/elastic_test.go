@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	Url      = "http://localhost:9200/"
-	Username = ""
-	Password = ""
+	Url      = "http://127.0.0.1:9200/"
+	Username = "elastic"
+	Password = "654321"
 	Index    = "test-index"
 )
 

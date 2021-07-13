@@ -1,11 +1,13 @@
 package http_server
 
 import (
+	"github.com/eager7/elog"
 	"github.com/gin-gonic/gin"
 	"log-monitor/elastic"
 	"log-monitor/http_server/handle"
-	"log-monitor/logger"
 )
+
+var log = elog.NewLogger("log_http_server", elog.NoticeLevel)
 
 type LogHttpServer struct {
 	inAddress string
@@ -25,7 +27,7 @@ func (d *LogHttpServer) Run() {
 	d.initRouter()
 	go func() {
 		if err := d.internal.Run(d.inAddress); err != nil {
-			logger.Error("http_server run internal err:", err)
+			log.Error("http_server run internal err:", err)
 		}
 	}()
 }

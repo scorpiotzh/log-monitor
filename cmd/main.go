@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/eager7/elog"
 	"github.com/fsnotify/fsnotify"
 	"github.com/urfave/cli"
 	"log-monitor/config"
 	"log-monitor/elastic"
 	"log-monitor/http_server"
-	"log-monitor/logger"
 	"log-monitor/timer"
 	"log-monitor/utils"
 	"os"
@@ -21,6 +21,7 @@ import (
 
 var (
 	exit = make(chan struct{})
+	log  = elog.NewLogger("log_main", elog.NoticeLevel)
 )
 
 func main() {
@@ -59,24 +60,24 @@ func main() {
 func runServer(ctx *cli.Context) error {
 	// 配置文件
 	configFilePath := readConfigFilePath(ctx)
-	logger.Info("configFilePath:", configFilePath)
+	log.Info("configFilePath:", configFilePath)
 	if err := config.InitCfgFromFile(configFilePath, &config.Cfg); err != nil {
 		return fmt.Errorf("InitCfgFromFile err:%s", err.Error())
 	}
 	// 热更新
 	if err := utils.AddConfigFileWatcher(configFilePath, func(optName fsnotify.Op) {
 		if err := config.InitCfgFromFile(configFilePath, &config.Cfg); err != nil {
-			logger.Error("InitCfgFromFile err:", err.Error())
+			log.Error("InitCfgFromFile err:", err.Error())
 		}
 	}); err != nil {
 		return fmt.Errorf("AddConfigFileWatcher err: %s", err.Error())
 	}
-	logger.Info("config:", utils.Json(&config.Cfg))
+	log.Info("config:", utils.Json(&config.Cfg))
 	// 安全退出
 	ctxServer, ctxCancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
 	utils.ListenSysInterrupt(func(sig os.Signal) {
-		logger.Warnf("signal [%s] to exit server...., time: %s", sig.String(), time.Now().String())
+		log.Warnf("signal [%s] to exit server...., time: %s", sig.String(), time.Now().String())
 		ctxCancel()
 		wg.Wait()
 		exit <- struct{}{}
@@ -95,7 +96,7 @@ func runServer(ctx *cli.Context) error {
 	logHttp.Run()
 
 	<-exit
-	logger.Warn("success exit server. bye bye!")
+	log.Warn("success exit server. bye bye!")
 	return nil
 }
 
