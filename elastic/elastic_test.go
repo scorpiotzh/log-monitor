@@ -22,13 +22,13 @@ func TestPushIndex(t *testing.T) {
 		t.Fatal(err)
 	}
 	la := LogApi{
-		Method:  "test",
-		Ip:      "127.0.0.1",
-		Latency: time.Second * 1,
-		CalTime: time.Now(),
-		LogDate: time.Now().Format("2006-01-02"),
-		ErrMsg:  "",
-		ErrNo:   0,
+		Method:   "test",
+		Ip:       "127.0.0.1",
+		Latency:  time.Second * 1,
+		CallTime: time.Now(),
+		LogDate:  time.Now().Format("2006-01-02"),
+		ErrMsg:   "",
+		ErrNo:    0,
 	}
 	err = ela.PushIndex(Index, la)
 	if err != nil {

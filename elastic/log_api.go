@@ -7,6 +7,7 @@ import (
 	"log-monitor/utils"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -54,7 +55,7 @@ func (e *Elastic) SearchLogApiInfo(index, method string, before time.Duration) (
 	gte := strconv.FormatInt(time.Now().Add(before).UnixNano()/1e6, 10)
 	q := elastic.NewBoolQuery().Filter(
 		elastic.NewRangeQuery("call_time").Gte(gte),
-		elastic.NewTermQuery("method", method),
+		elastic.NewTermQuery("method", strings.ToLower(method)),
 	)
 
 	sumLatency := elastic.NewSumAggregation().Field("latency")

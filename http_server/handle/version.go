@@ -1,40 +1,20 @@
 package handle
 
 import (
-	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/olivere/elastic/v7"
 	"log-monitor/config"
 	"log-monitor/utils"
 	"net/http"
-	"strconv"
 	"time"
 )
 
 func (l *LogHttpHandle) Version(ctx *gin.Context) {
 	log.Info("Version:", time.Now().String())
 
-	gte := strconv.FormatInt(time.Now().Add(-time.Hour).UnixNano()/1e6, 10)
-	fmt.Println(time.Now().Add(-time.Hour), gte)
-	q := elastic.NewBoolQuery().Filter(
-		elastic.NewRangeQuery("call_time").Gte(gte),
-		elastic.NewTermQuery("method", "dasconfig"),
-	)
-	res, err := l.ela.Client().Search().Index("das2-index").Query(q).Size(100).Do(context.TODO())
-	if err != nil {
-		log.Error(err)
-	}
-	log.Info("Version:", utils.Json(&res))
-
 	ctx.JSON(http.StatusOK, utils.ApiRespOK(nil))
 }
 
 func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
-	res, _ := l.ela.Traverse("das2-index")
-	//list := elastic.SearchResultToLogApi(res)
-	log.Info("Traverse:", utils.Json(&res))
-
 	apiMap := make(map[string][]utils.ApiInfo)
 	for index, methods := range config.Cfg.TimerServer.CheckIndexList {
 		for _, m := range methods {
