@@ -50,3 +50,8 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 	_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, apiMap)
 	ctx.JSON(http.StatusOK, utils.ApiRespOK(nil))
 }
+
+func (l *LogHttpHandle) DelLog(ctx *gin.Context) {
+	_ = l.ela.Purge("das2-index")
+	ctx.JSON(http.StatusOK, utils.ApiRespOK(nil))
+}
