@@ -66,7 +66,7 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 	if len(apiMap) == 0 {
 		return nil
 	}
-	msg := `<font color="warning">接口告警</font>
+	msg := `<font color="info">接口告警</font>
 接口｜总次数｜成功率｜平均耗时
 `
 	indexStr := `
