@@ -112,5 +112,5 @@ func (l *LogTimer) doApiCheckAll() error {
 			})
 		}
 	}
-	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyAllTicker, apiMap)
+	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
 }
