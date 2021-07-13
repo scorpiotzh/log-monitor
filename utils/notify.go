@@ -71,15 +71,21 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 	indexStr := `
 <font color="info">%s</font>
 `
-	methodStr := "> %s|%d|%.f%%|%.3f ms\n"
-	methodStr2 := "> %s|%d|%.f%%|%.3f s\n"
+	methodStr := "> %s | %d | %s | %.3f ms\n"
+	methodStr2 := "> %s | %d | %s | %.3f s\n"
 	for k, api := range apiMap {
 		msg += fmt.Sprintf(indexStr, k)
 		for _, m := range api {
-			if m.AverageResponseTime.Seconds() > 1 {
-				msg += fmt.Sprintf(methodStr2, m.Method, m.Total, m.SuccessRate*100, m.AverageResponseTime.Seconds())
+			successRate := ""
+			if m.SuccessRate < 0.9 {
+				successRate = fmt.Sprintf(`<font color="warning">%.f%%</font>`, m.SuccessRate*100)
 			} else {
-				msg += fmt.Sprintf(methodStr, m.Method, m.Total, m.SuccessRate*100, float64(m.AverageResponseTime.Microseconds()/1000))
+				successRate = fmt.Sprintf(`%.f%%`, m.SuccessRate*100)
+			}
+			if m.AverageResponseTime.Seconds() > 1 {
+				msg += fmt.Sprintf(methodStr2, m.Method, m.Total, successRate, m.AverageResponseTime.Seconds())
+			} else {
+				msg += fmt.Sprintf(methodStr, m.Method, m.Total, successRate, float64(m.AverageResponseTime.Microseconds()/1000))
 			}
 		}
 	}
