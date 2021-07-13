@@ -19,6 +19,7 @@ func (l *LogHttpHandle) Version(ctx *gin.Context) {
 	fmt.Println(time.Now().Add(-time.Hour), gte)
 	q := elastic.NewBoolQuery().Filter(
 		elastic.NewRangeQuery("call_time").Gte(gte),
+		elastic.NewTermQuery("method", "dasconfig"),
 	)
 	res, err := l.ela.Client().Search().Index("das2-index").Query(q).Size(100).Do(context.TODO())
 	if err != nil {
