@@ -80,7 +80,7 @@ func SendNotifyWxApiInfo(key string, rate, duration time.Duration, apiMap map[st
 			if m.SuccessRate < 0.9 {
 				successRate = fmt.Sprintf(`<font color="warning">%.f%%</font>`, m.SuccessRate*100)
 			} else {
-				successRate = fmt.Sprintf(`%.g%%`, m.SuccessRate*100)
+				successRate = fmt.Sprintf(`%.f%%`, m.SuccessRate*100)
 			}
 			averageResponseTime := ""
 			if m.AverageResponseTime.Seconds() > 1 {
