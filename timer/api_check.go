@@ -55,7 +55,7 @@ func (l *LogTimer) doApiCheck() error {
 				continue
 			} else { //	成功率低于90%告警
 				apiMap[index] = append(apiMap[index], utils.ApiInfo{
-					Method:              m.Method,
+					Method:              m.Desc,
 					Total:               total,
 					OkCount:             okCount,
 					FailCount:           errCount,
