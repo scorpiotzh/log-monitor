@@ -58,7 +58,7 @@ func (l *LogTimer) doApiCheck() error {
 				avgTime = time.Duration(res.Aggregations.TotalTime.Value) / time.Duration(total)
 				successRate = float64(okCount) / float64(total)
 			}
-			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%.3f s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
+			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%.3g s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
 			if total < config.Cfg.TimerServer.ApiNotifyMinCallNum && total < m.Num {
 				continue
 			}
@@ -84,7 +84,7 @@ func (l *LogTimer) doApiCheckAll() error {
 	apiMap := make(map[string][]utils.ApiInfo)
 	for index, methods := range config.Cfg.TimerServer.CheckIndexList {
 		for _, m := range methods {
-			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Minute*config.Cfg.TimerServer.ApiNotifyAllTicker)
+			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Minute*config.Cfg.TimerServer.ApiNotifyCheckAllTime)
 			if err != nil {
 				return fmt.Errorf("SearchLogApiInfo err:%s [%s]", err.Error(), m.Method)
 			}
@@ -100,7 +100,7 @@ func (l *LogTimer) doApiCheckAll() error {
 				continue
 			}
 
-			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%.3f s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
+			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%.3g s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
 			apiMap[index] = append(apiMap[index], utils.ApiInfo{
 				Method:              m.Method,
 				MethodDesc:          m.Desc,

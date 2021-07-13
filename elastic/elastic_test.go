@@ -78,3 +78,8 @@ func TestSearch(t *testing.T) {
 		fmt.Println(utils.Json(&res2))
 	}
 }
+
+func TestTimeFormat(t *testing.T) {
+	a := fmt.Sprintf(`%.3f ms`, 137.000)
+	fmt.Println(a)
+}
