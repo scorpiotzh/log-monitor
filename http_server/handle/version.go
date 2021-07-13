@@ -17,7 +17,7 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 	apiMap := make(map[string][]utils.ApiInfo)
 	for index, methods := range config.Cfg.TimerServer.CheckIndexList {
 		for _, m := range methods {
-			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Minute*config.Cfg.TimerServer.ApiNotifyCheckTime)
+			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Hour*24)
 			if err != nil {
 				log.Error("SearchLogApiInfo err:", err.Error(), m.Method)
 				ctx.JSON(http.StatusOK, utils.ApiRespErr(http.StatusInternalServerError, err.Error()))

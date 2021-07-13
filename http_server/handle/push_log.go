@@ -39,6 +39,7 @@ func (l *LogHttpHandle) PushLog(ctx *gin.Context) {
 		ErrNo:   req.ErrNo,
 	}
 	if err := l.ela.PushIndex(req.Index, &la); err != nil {
+		log.Error("PushIndex err:", err.Error(), utils.Json(&req))
 		ctx.JSON(http.StatusOK, utils.ApiRespErr(http.StatusInternalServerError, fmt.Sprintf("PushIndex err:%s", err.Error())))
 		return
 	}
