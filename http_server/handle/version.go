@@ -35,7 +35,8 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 			}
 			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d ms]", index, m.Method, total, okCount, errCount, avgTime.Microseconds())
 			apiMap[index] = append(apiMap[index], utils.ApiInfo{
-				Method:              m.Desc,
+				Method:              m.Method,
+				MethodDesc:          m.Desc,
 				Total:               total,
 				OkCount:             okCount,
 				FailCount:           errCount,

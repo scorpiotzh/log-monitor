@@ -54,6 +54,7 @@ func SendNotifyWx(msgType, msg, key string) error {
 
 type ApiInfo struct {
 	Method              string        `json:"method"`
+	MethodDesc          string        `json:"method_desc"`
 	Total               int           `json:"total"`
 	OkCount             int           `json:"ok_count"`
 	FailCount           int           `json:"fail_count"`
@@ -66,13 +67,12 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 		return nil
 	}
 	msg := `<font color="warning">接口告警</font>
-方法 | 次数 | 成功率 | 时间
+接口｜总次数｜成功率｜平均耗时
 `
 	indexStr := `
 <font color="info">%s</font>
 `
-	methodStr := "> %s | %d | %s | %.3f ms\n"
-	methodStr2 := "> %s | %d | %s | %.3f s\n"
+	methodStr := "> %s｜%d｜%s｜%s\n"
 	for k, api := range apiMap {
 		msg += fmt.Sprintf(indexStr, k)
 		for _, m := range api {
@@ -82,11 +82,13 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 			} else {
 				successRate = fmt.Sprintf(`%.f%%`, m.SuccessRate*100)
 			}
+			averageResponseTime := ""
 			if m.AverageResponseTime.Seconds() > 1 {
-				msg += fmt.Sprintf(methodStr2, m.Method, m.Total, successRate, m.AverageResponseTime.Seconds())
+				averageResponseTime = fmt.Sprintf(`<font color="warning">%.3f s</font>`, m.AverageResponseTime.Seconds())
 			} else {
-				msg += fmt.Sprintf(methodStr, m.Method, m.Total, successRate, float64(m.AverageResponseTime.Microseconds()/1000))
+				averageResponseTime = fmt.Sprintf(`%.3f ms`, float64(m.AverageResponseTime.Microseconds()/1000))
 			}
+			msg += fmt.Sprintf(methodStr, m.Method, m.Total, successRate, averageResponseTime)
 		}
 	}
 	return SendNotifyWx(NotifyWxTypeMarkdown, msg, key)

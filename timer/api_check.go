@@ -61,7 +61,8 @@ func (l *LogTimer) doApiCheck() error {
 				continue
 			} else { //	成功率低于90%告警
 				apiMap[index] = append(apiMap[index], utils.ApiInfo{
-					Method:              m.Desc,
+					Method:              m.Method,
+					MethodDesc:          m.Desc,
 					Total:               total,
 					OkCount:             okCount,
 					FailCount:           errCount,
@@ -94,7 +95,8 @@ func (l *LogTimer) doApiCheckAll() error {
 
 			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
 			apiMap[index] = append(apiMap[index], utils.ApiInfo{
-				Method:              m.Desc,
+				Method:              m.Method,
+				MethodDesc:          m.Desc,
 				Total:               total,
 				OkCount:             okCount,
 				FailCount:           errCount,
