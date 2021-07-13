@@ -23,7 +23,11 @@ func (l *LogTimer) RunApiCheck(ctx context.Context, wg *sync.WaitGroup) {
 				}
 				log.Info("RunApiCheck doApiCheck end ...")
 			case <-tickerAll.C:
-
+				log.Info("RunApiCheck doApiCheckAll start ...")
+				if err := l.doApiCheckAll(); err != nil {
+					log.Error("doApiCheckAll err:", err)
+				}
+				log.Info("RunApiCheck doApiCheckAll end ...")
 			case <-ctx.Done():
 				wg.Done()
 				return
@@ -44,15 +48,14 @@ func (l *LogTimer) doApiCheck() error {
 			okCount := res.Aggregations.SuccessCount.DocCount
 			errCount := res.Aggregations.ErrorCount.DocCount
 			avgTime := time.Duration(0)
+			successRate := float64(1)
 			if total > 0 {
 				avgTime = time.Duration(res.Aggregations.TotalTime.Value) / time.Duration(total)
+				successRate = float64(okCount) / float64(total)
 			}
-			successRate := float64(1)
-			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d ms]", index, m.Method, total, okCount, errCount, avgTime.Microseconds())
+			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
 			if total < config.Cfg.TimerServer.ApiNotifyMinCallNum && total < m.Num {
 				continue
-			} else if total > 0 {
-				successRate = float64(okCount) / float64(total)
 			}
 			if successRate > 0.9 {
 				continue
@@ -66,6 +69,38 @@ func (l *LogTimer) doApiCheck() error {
 					AverageResponseTime: avgTime,
 				})
 			}
+		}
+	}
+	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, apiMap)
+}
+
+func (l *LogTimer) doApiCheckAll() error {
+	apiMap := make(map[string][]utils.ApiInfo)
+	for index, methods := range config.Cfg.TimerServer.CheckIndexList {
+		for _, m := range methods {
+			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Minute*config.Cfg.TimerServer.ApiNotifyAllTicker)
+			if err != nil {
+				return fmt.Errorf("SearchLogApiInfo err:%s [%s]", err.Error(), m.Method)
+			}
+			total := res.Aggregations.TotalCount.Value
+			okCount := res.Aggregations.SuccessCount.DocCount
+			errCount := res.Aggregations.ErrorCount.DocCount
+			avgTime := time.Duration(0)
+			successRate := float64(1)
+			if total > 0 {
+				avgTime = time.Duration(res.Aggregations.TotalTime.Value) / time.Duration(total)
+				successRate = float64(okCount) / float64(total)
+			}
+
+			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
+			apiMap[index] = append(apiMap[index], utils.ApiInfo{
+				Method:              m.Desc,
+				Total:               total,
+				OkCount:             okCount,
+				FailCount:           errCount,
+				SuccessRate:         successRate,
+				AverageResponseTime: avgTime,
+			})
 		}
 	}
 	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, apiMap)
