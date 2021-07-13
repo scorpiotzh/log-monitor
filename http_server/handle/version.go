@@ -16,7 +16,7 @@ func (l *LogHttpHandle) Version(ctx *gin.Context) {
 	log.Info("Version:", time.Now().String())
 
 	gte := strconv.FormatInt(time.Now().Add(-time.Hour).UnixNano()/1e6, 10)
-	fmt.Println()
+	fmt.Println(time.Now().Add(-time.Hour), gte)
 	q := elastic.NewBoolQuery().Filter(
 		elastic.NewRangeQuery("call_time").Gte(gte),
 		elastic.NewTermQuery("method", "DasConfig"),
