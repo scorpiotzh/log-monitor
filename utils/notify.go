@@ -79,7 +79,7 @@ func SendNotifyWxApiInfo(key string, apiMap map[string][]ApiInfo) error {
 			if m.AverageResponseTime.Seconds() > 1 {
 				msg += fmt.Sprintf(methodStr2, m.Method, m.Total, m.SuccessRate*100, m.AverageResponseTime.Seconds())
 			} else {
-				msg += fmt.Sprintf(methodStr, m.Method, m.Total, m.SuccessRate*100, float64(m.AverageResponseTime.Microseconds())/1000)
+				msg += fmt.Sprintf(methodStr, m.Method, m.Total, m.SuccessRate*100, float64(m.AverageResponseTime.Microseconds()/1000))
 			}
 		}
 	}
