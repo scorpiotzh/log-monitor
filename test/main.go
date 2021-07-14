@@ -15,6 +15,10 @@ func main() {
 	doMerkle2()
 }
 
+// 数据文件计算得 sha256 hash 值
+// 所有文件hash排序后，大小端字节转换
+// 两两计算两次 sha256 hash
+// 最终结果再大小端字节转换得默克尔根
 func doMerkle() {
 	hashList := getHashList()
 	for i, v := range hashList {
