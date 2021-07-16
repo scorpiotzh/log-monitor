@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/eager7/elog"
 	"github.com/fsnotify/fsnotify"
 	"github.com/scorpiotzh/mylog"
 	"github.com/urfave/cli"
@@ -22,7 +21,7 @@ import (
 
 var (
 	exit = make(chan struct{})
-	log  = elog.NewLogger("log_main", elog.NoticeLevel)
+	log  = mylog.NewLogger("main", mylog.LevelDebug)
 )
 
 func main() {
@@ -95,10 +94,6 @@ func runServer(ctx *cli.Context) error {
 
 	logHttp := http_server.Initialize(ela, config.Cfg.HttpServer.InAddress)
 	logHttp.Run()
-
-	mylog.InitMyLog(nil)
-	mlog := mylog.NewLogger("main", mylog.LevelDebug)
-	mlog.Info("mylog 服务重启。。。")
 
 	<-exit
 	log.Warn("success exit server. bye bye!")

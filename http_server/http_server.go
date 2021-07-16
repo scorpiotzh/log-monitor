@@ -1,13 +1,13 @@
 package http_server
 
 import (
-	"github.com/eager7/elog"
 	"github.com/gin-gonic/gin"
+	"github.com/scorpiotzh/mylog"
 	"log-monitor/elastic"
 	"log-monitor/http_server/handle"
 )
 
-var log = elog.NewLogger("log_http_server", elog.NoticeLevel)
+var log = mylog.NewLogger("http_server", mylog.LevelDebug)
 
 type LogHttpServer struct {
 	inAddress string

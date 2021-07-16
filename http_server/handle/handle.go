@@ -1,11 +1,11 @@
 package handle
 
 import (
-	"github.com/eager7/elog"
+	"github.com/scorpiotzh/mylog"
 	"log-monitor/elastic"
 )
 
-var log = elog.NewLogger("log_http_handle", elog.NoticeLevel)
+var log = mylog.NewLogger("http_handle", mylog.LevelDebug)
 
 type LogHttpHandle struct {
 	ela *elastic.Elastic

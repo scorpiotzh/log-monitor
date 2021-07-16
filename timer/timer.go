@@ -1,12 +1,12 @@
 package timer
 
 import (
-	"github.com/eager7/elog"
 	"github.com/robfig/cron"
+	"github.com/scorpiotzh/mylog"
 	"log-monitor/elastic"
 )
 
-var log = elog.NewLogger("log_timer", elog.NoticeLevel)
+var log = mylog.NewLogger("timer", mylog.LevelDebug)
 
 type LogTimer struct {
 	task *cron.Cron
