@@ -96,6 +96,7 @@ func runServer(ctx *cli.Context) error {
 	logHttp := http_server.Initialize(ela, config.Cfg.HttpServer.InAddress)
 	logHttp.Run()
 
+	mylog.InitMyLog(nil)
 	mlog := mylog.NewLogger("main", mylog.LevelDebug)
 	mlog.Info("mylog 服务重启。。。")
 
