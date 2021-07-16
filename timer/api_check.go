@@ -62,7 +62,7 @@ func (l *LogTimer) doApiCheck() error {
 			if total < config.Cfg.TimerServer.ApiNotifyMinCallNum && total < m.Num {
 				continue
 			}
-			if successRate > 0.9 {
+			if successRate >= 0.9 {
 				continue
 			} else { //	成功率低于90%告警
 				apiMap[index] = append(apiMap[index], utils.ApiInfo{
