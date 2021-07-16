@@ -11,8 +11,8 @@ require (
 	github.com/olivere/elastic/v7 v7.0.25
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/robfig/cron v1.2.0
+	github.com/scorpiotzh/mylog v1.0.6
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/urfave/cli v1.22.5
-	go.uber.org/zap v1.18.1 // indirect
 	moul.io/http2curl v1.0.0 // indirect
 )

@@ -10,11 +10,11 @@ import (
 )
 
 func (l *LogTimer) RunApiCheck(ctx context.Context, wg *sync.WaitGroup) {
-	go func() {
-		if err := l.doApiCheckAll(); err != nil {
-			log.Error("doApiCheckAll err:", err)
-		}
-	}()
+	//go func() {
+	//	if err := l.doApiCheckAll(); err != nil {
+	//		log.Error("doApiCheckAll err:", err)
+	//	}
+	//}()
 	tickerApi := time.NewTicker(time.Minute * config.Cfg.TimerServer.ApiNotifyTicker)
 	tickerAll := time.NewTicker(time.Minute * config.Cfg.TimerServer.ApiNotifyAllTicker)
 	wg.Add(1)

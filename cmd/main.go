@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/eager7/elog"
 	"github.com/fsnotify/fsnotify"
+	"github.com/scorpiotzh/mylog"
 	"github.com/urfave/cli"
 	"log-monitor/config"
 	"log-monitor/elastic"
@@ -94,6 +95,9 @@ func runServer(ctx *cli.Context) error {
 
 	logHttp := http_server.Initialize(ela, config.Cfg.HttpServer.InAddress)
 	logHttp.Run()
+
+	mlog := mylog.NewLogger("main", mylog.LevelDebug)
+	mlog.Info("mylog 服务重启。。。")
 
 	<-exit
 	log.Warn("success exit server. bye bye!")
