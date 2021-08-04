@@ -52,9 +52,13 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 }
 
 func getNotifyStr(rate, duration time.Duration, apiMap map[string][]utils.ApiInfo) string {
-	msg := fmt.Sprintf("接口告警 (频率 - 时长：%d分钟 - %d分钟)\n接口｜总次数｜成功率｜平均耗时\n", rate, duration)
-	indexStr := "- %s\n"
-	methodStr := "- %s｜%d｜%s｜%s\n"
+	msg := fmt.Sprintf(`接口告警 (频率 - 时长：%d分钟 - %d分钟)
+接口｜总次数｜成功率｜平均耗时
+`, rate, duration)
+	indexStr := `- %s
+`
+	methodStr := `- %s｜%d｜%s｜%s
+`
 	for k, api := range apiMap {
 		msg += fmt.Sprintf(indexStr, k)
 		for _, m := range api {
