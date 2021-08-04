@@ -48,14 +48,14 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 		}
 	}
 	//_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, 1, 1, apiMap)
-	ctx.JSON(http.StatusOK, utils.ApiRespOK(getNotifyStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)))
+	ctx.JSON(http.StatusOK, getNotifyStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap))
 }
 
 func getNotifyStr(rate, duration time.Duration, apiMap map[string][]utils.ApiInfo) string {
 	msg := fmt.Sprintf(`接口告警 (频率 - 时长：%d分钟 - %d分钟)
 接口｜总次数｜成功率｜平均耗时
 `, rate, duration)
-	indexStr := `- %s
+	indexStr := `[ %s ]
 `
 	methodStr := `- %s｜%d｜%s｜%s
 `
