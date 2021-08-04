@@ -1,6 +1,7 @@
 package handle
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log-monitor/config"
 	"log-monitor/utils"
@@ -18,10 +19,9 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 	apiMap := make(map[string][]utils.ApiInfo)
 	for index, methods := range config.Cfg.TimerServer.CheckIndexList {
 		for _, m := range methods {
-			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Hour*24)
+			res, err := l.ela.SearchLogApiInfo(index, m.Method, -time.Minute*config.Cfg.TimerServer.ApiNotifyCheckAllTime)
 			if err != nil {
-				log.Error("SearchLogApiInfo err:", err.Error(), m.Method)
-				ctx.JSON(http.StatusOK, utils.ApiRespErr(http.StatusInternalServerError, err.Error()))
+				ctx.JSON(http.StatusOK, utils.ApiRespErr(500, fmt.Sprintf("SearchLogApiInfo err:%s [%s]", err.Error(), m.Method)))
 				return
 			}
 			total := res.Aggregations.TotalCount.Value
@@ -32,8 +32,10 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 			if total > 0 {
 				avgTime = time.Duration(res.Aggregations.TotalTime.Value) / time.Duration(total)
 				successRate = float64(okCount) / float64(total)
+			} else {
+				continue
 			}
-			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%d ms]", index, m.Method, total, okCount, errCount, avgTime.Microseconds())
+			log.Warnf("doApiCheck: API[%s],方法[%s],总数[%d],成功[%d],失败[%d],平均时间[%.3g s]", index, m.Method, total, okCount, errCount, avgTime.Seconds())
 			apiMap[index] = append(apiMap[index], utils.ApiInfo{
 				Method:              m.Method,
 				MethodDesc:          m.Desc,
@@ -45,8 +47,32 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 			})
 		}
 	}
-	_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, 1, 1, apiMap)
-	ctx.JSON(http.StatusOK, utils.ApiRespOK(nil))
+	//_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, 1, 1, apiMap)
+	ctx.JSON(http.StatusOK, utils.ApiRespOK(getNotifyStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)))
+}
+
+func getNotifyStr(rate, duration time.Duration, apiMap map[string][]utils.ApiInfo) string {
+	msg := fmt.Sprintf(`接口告警 (频率 - 时长：%d分钟 - %d分钟)
+接口｜总次数｜成功率｜平均耗时
+`, rate, duration)
+	indexStr := `
+>> %s
+`
+	methodStr := "> %s｜%d｜%s｜%s\n"
+	for k, api := range apiMap {
+		msg += fmt.Sprintf(indexStr, k)
+		for _, m := range api {
+			successRate := fmt.Sprintf(`%.f%%`, m.SuccessRate*100)
+			averageResponseTime := ""
+			if m.AverageResponseTime.Seconds() > 1 {
+				averageResponseTime = fmt.Sprintf(`<font color="warning">%.3g s</font>`, m.AverageResponseTime.Seconds())
+			} else {
+				averageResponseTime = fmt.Sprintf(`%.3g ms`, float64(m.AverageResponseTime.Microseconds()/1000))
+			}
+			msg += fmt.Sprintf(methodStr, m.MethodDesc, m.Total, successRate, averageResponseTime)
+		}
+	}
+	return msg
 }
 
 func (l *LogHttpHandle) DelLog(ctx *gin.Context) {
