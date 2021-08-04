@@ -32,7 +32,7 @@ func TestSendNotifyWxApiInfo(t *testing.T) {
 
 func TestLarkNotifyBot(t *testing.T) {
 	//fmt.Println(fmt.Sprintf("%s	｜\n%s	｜","嗷嗷","啊啊啊啊"))
-	url := "https://open.larksuite.com/open-apis/bot/v2/hook/b44a2fa0-a994-45ed-8964-d99d3aa77a68"
+	url := "https://open.larksuite.com/open-apis/bot/v2/hook/"
 	type MsgContent struct {
 		Tag      string `json:"tag"`
 		UnEscape bool   `json:"un_escape"`
