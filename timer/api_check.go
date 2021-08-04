@@ -77,7 +77,10 @@ func (l *LogTimer) doApiCheck() error {
 			}
 		}
 	}
-	msg := utils.GetSendLarkNotifyApiInfoStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
+	if len(apiMap) == 0 {
+		return nil
+	}
+	msg := utils.GetSendLarkNotifyApiInfoStr(config.Cfg.TimerServer.ApiNotifyTicker, config.Cfg.TimerServer.ApiNotifyCheckTime, apiMap)
 	utils.SendLarkTextNotify(config.Cfg.TimerServer.ApiNotifyLarkKey, "接口监控", msg)
 	return nil
 	//return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyTicker, config.Cfg.TimerServer.ApiNotifyCheckTime, apiMap)
@@ -114,6 +117,9 @@ func (l *LogTimer) doApiCheckAll() error {
 				AverageResponseTime: avgTime,
 			})
 		}
+	}
+	if len(apiMap) == 0 {
+		return nil
 	}
 	msg := utils.GetSendLarkNotifyApiInfoStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
 	utils.SendLarkTextNotify(config.Cfg.TimerServer.ApiNotifyLarkKey, "接口监控", msg)
