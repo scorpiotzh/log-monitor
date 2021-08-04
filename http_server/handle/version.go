@@ -48,7 +48,7 @@ func (l *LogHttpHandle) SearchLogApiInfo(ctx *gin.Context) {
 		}
 	}
 	//_ = utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, 1, 1, apiMap)
-	ctx.JSON(http.StatusOK, getNotifyStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap))
+	ctx.String(http.StatusOK, getNotifyStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap))
 }
 
 func getNotifyStr(rate, duration time.Duration, apiMap map[string][]utils.ApiInfo) string {
