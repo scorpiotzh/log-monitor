@@ -57,7 +57,7 @@ func getNotifyStr(rate, duration time.Duration, apiMap map[string][]utils.ApiInf
 `, rate, duration)
 	indexStr := `[ %s ]
 `
-	methodStr := `- %-6s	｜%-5d｜%-4s｜%s
+	methodStr := `- %-6s		｜%-5d	｜%-4s	｜%s
 `
 	for k, api := range apiMap {
 		msg += fmt.Sprintf(indexStr, k)
