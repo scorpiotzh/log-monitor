@@ -24,6 +24,7 @@ type LogConfig struct {
 		ApiNotifyAllTicker    time.Duration `json:"api_notify_all_ticker" yaml:"api_notify_all_ticker"`
 		ApiNotifyCheckAllTime time.Duration `json:"api_notify_check_all_time" yaml:"api_notify_check_all_time"`
 		ApiNotifyWxKey        string        `json:"api_notify_wx_key" yaml:"api_notify_wx_key"`
+		ApiNotifyLarkKey      string        `json:"api_notify_lark_key" yaml:"api_notify_lark_key"`
 		DeleteIndexList       []string      `json:"delete_index_list" yaml:"delete_index_list"`
 		CheckIndexList        map[string][]struct {
 			Method string `json:"method" yaml:"method"`

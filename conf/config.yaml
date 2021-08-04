@@ -10,7 +10,8 @@ timer_server:
   api_notify_check_time: 240 # 健康检测时长 分钟
   api_notify_all_ticker: 120 # 全检测频率 分钟
   api_notify_check_all_time: 240 # 全检测时长 分钟
-  api_notify_wx_key: "7b059317-bbf7-45d7-bb5d-aac6ce5ab416" # 微信通知 key
+  api_notify_wx_key: "" # 微信通知 key
+  api_notify_lark_key: "" # lark通知
   delete_index_list: [ "das-test-index" ]
   check_index_list:
     "das-test-index":

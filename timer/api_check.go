@@ -77,7 +77,10 @@ func (l *LogTimer) doApiCheck() error {
 			}
 		}
 	}
-	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyTicker, config.Cfg.TimerServer.ApiNotifyCheckTime, apiMap)
+	msg := utils.GetSendLarkNotifyApiInfoStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
+	utils.SendLarkTextNotify(config.Cfg.TimerServer.ApiNotifyLarkKey, "接口监控", msg)
+	return nil
+	//return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyTicker, config.Cfg.TimerServer.ApiNotifyCheckTime, apiMap)
 }
 
 func (l *LogTimer) doApiCheckAll() error {
@@ -112,5 +115,8 @@ func (l *LogTimer) doApiCheckAll() error {
 			})
 		}
 	}
-	return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
+	msg := utils.GetSendLarkNotifyApiInfoStr(config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
+	utils.SendLarkTextNotify(config.Cfg.TimerServer.ApiNotifyLarkKey, "接口监控", msg)
+	return nil
+	//return utils.SendNotifyWxApiInfo(config.Cfg.TimerServer.ApiNotifyWxKey, config.Cfg.TimerServer.ApiNotifyAllTicker, config.Cfg.TimerServer.ApiNotifyCheckAllTime, apiMap)
 }
