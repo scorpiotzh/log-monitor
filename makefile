@@ -1,7 +1,7 @@
 # build file
 GOCMD=go
 # Use -a flag to prevent code cache problems.
-GOBUILD=$(GOCMD) build -mod=vendor -ldflags -s -v -a
+GOBUILD=$(GOCMD) build -mod=vendor -ldflags -s -v
 
 log: BIN_BINARY_NAME=log_server
 log:
